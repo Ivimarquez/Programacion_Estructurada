@@ -1,0 +1,31 @@
+from Productos import inventario
+from Ventas import venta
+print("\n\t ..:: 📝 Agregar registro de venta  ::..")
+Id_producto=input("\n\t  ▍▎▎▍ Ingrese el codigo del producto que desea buscar: ").strip()
+while (len(Id_producto)==0) or (len(Id_producto)<8 or len(Id_producto)>10):
+    Id_producto=input("\n\t ⚠️ Por favor ingrese un codigo valido debe tener de 8-12 caracteres: ").strip()
+Id_empleado=input("Id_empleado: ")
+continua2=True
+while continua2:
+    try:
+        cantidad_productos=int(input("\t 🔢 Ingrese la cantidad de productos: "))
+        continua2=False
+    except ValueError:
+        print("\t ⚠️ Por favor ingrese datos numericos en cantidad de productos")
+resp3=inventario.BuscarProductos(Id_producto)
+try:
+    if len(resp3)>0:
+        subtotal=cantidad_productos*float(resp3[4])
+        iva=subtotal*.16
+        total=subtotal+iva
+        resp4=venta.AgregarVenta(Id_empleado,Id_producto,resp3[2],cantidad_productos,resp3[4],subtotal,iva,total)
+        if resp4:
+            print(f"\n\t ::: ✅ Se ha registrado la venta con exito :::")
+            n=inventario.VentaProducto(Id_producto,cantidad_productos)
+            print(n)
+        else:
+            print("\n\t ❌ Hubo un error al intentar registrar la venta .Por favor intente de nuevo...")
+    else:
+        print("\t ⚠️ Por favor ingrese ventas de productos existentes en inventario")
+except TypeError:
+    print("\t ⚠️ Por favor ingrese ventas de productos existentes en inventario")
